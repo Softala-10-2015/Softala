@@ -4,19 +4,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Kysymys</title>
+<title>404</title>
 </head>
 <body>
-
-<form action="" method="post">
-
-kysymysteksti
-<br>
-<textarea style="resize:none" rows="10" cols="50"></textarea>
-<br>
-<input type="submit" value="Lähetä">
-
-</form>
-
+<h1>404 Auringon Pizza & Kebab was not found</h1>
 </body>
 </html>

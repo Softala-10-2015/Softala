@@ -176,6 +176,7 @@ legend {
 }
 textarea {
   overflow: auto;
+  resize: none;
 }
 optgroup {
   font-weight: bold;

@@ -1,24 +1,27 @@
 package fi.softala.controller;
 
 import java.io.IOException;
-import java.util.Properties;
+import java.util.ArrayList;
+import java.util.Enumeration;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.mail.Message;
 
-import fi.softala.bean.Email;
 import fi.softala.helpers.EmailTools;
+import fi.softala.helpers.PropertyReader;
 
 /**
  * Servlet implementation class EmailServlet
  */
-@WebServlet("/EmailServlet")
+@WebServlet("/email")
 public class EmailServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private RequestDispatcher rd;
+	
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -32,22 +35,31 @@ public class EmailServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		EmailTools email = new EmailTools();
-		email.lahetaSahkoposti("softalamail@gmail.com",  "softala1", "aleksi.tilli@gmail.com","Palaute", "testi sis√§lt√∂");
+		rd = request.getRequestDispatcher("hyvinvointikysely.jsp");
+		rd.forward(request, response);
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//muutetaan, kun tiedossa mit√§ tietoja sivulta tulee
-		String answer = request.getParameter("html-form-string");
 		
+		//Haetaan k‰ytt‰j‰n syˆtt‰m‰ tieto
+		String vastaus=request.getParameter("InputMessage");
+		String receiver = request.getParameter("receiver");
+		
+		//Haetaan tunnukset property filest‰
+		String acc = PropertyReader.getInstance().getProperty("email_account");
+		String pwd = PropertyReader.getInstance().getProperty("email_password");
+		System.out.println(acc);
+		System.out.println(pwd);
+		
+		//Luodaan EmailTools-olio, joka l‰hett‰‰ s‰hkˆpostin haluttuun osoitteeseen
 		EmailTools email = new EmailTools();
-		email.lahetaSahkoposti("softalamail@gmail.com", "aleksi.tilli@gmail.com", "softala1", "Palaute", "testi sis√§lt√∂");
+		email.lahetaSahkoposti(acc, pwd, receiver,  "Palaute", vastaus);
 		
-		
-		response.sendRedirect("vahvistus.jsp");
+		//V‰litys seuraavalle jsp-sivulle
+		rd = request.getRequestDispatcher("vahvistus.jsp");
+		rd.forward(request, response);
 	}
-
 }
